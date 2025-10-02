@@ -2,33 +2,28 @@
 
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import * as z from "zod"
+import z from "zod"
+import { API_CONSTANTS } from "@/lib/constants/api-constants"
 
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Sparkles, Wrench, Package } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { toast } from "sonner"
+import { releaseSchema } from "@/lib/zod-schema/releasesSchema"
+import type { ReleaseFormData } from "@/lib/zod-schema/releasesSchema"
+import { useState } from "react"
 
-// ✅ Define Zod schema
-const releaseSchema = z.object({
-  version: z
-    .string()
-    .nonempty("Version number is required")
-    .regex(/^\d+\.\d+\.\d+$/, "Version must follow semantic versioning (e.g., 1.0.0)"),
-  changes: z
-    .string()
-    .min(10, "Please provide at least 10 characters describing changes"),
-})
 
-// Infer type from schema
-type ReleaseFormData = z.infer<typeof releaseSchema>
 
 export function ReleaseForm() {
+  const [submitLoading, setSubmitLoading] = useState(false);
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors, isValid },
+    reset,
   } = useForm<ReleaseFormData>({
     resolver: zodResolver(releaseSchema),
     defaultValues: {
@@ -37,10 +32,37 @@ export function ReleaseForm() {
     },
   })
 
-  const onSubmit = (data: ReleaseFormData) => {
+  const onSubmit = async (data: ReleaseFormData) => {
     console.log("✅ Release Notes:", data)
-    // here you can trigger API call, mutation etc
+
+    const promise = async () => {
+      try {
+        setSubmitLoading(true)
+        const response = await fetch(API_CONSTANTS.generate_release_md, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        })
+        const resp = await response.json()
+        console.log(resp)
+        reset()
+        return resp
+      } catch (error) {
+        throw error
+      } finally {
+        setSubmitLoading(false)
+      }
+    }
+
+    toast.promise(promise(), {
+      loading: "Generating release notes...",
+      success: () => "Release notes generated successfully",
+      error: () => "Failed to generate release notes",
+    })
   }
+
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -87,8 +109,8 @@ export function ReleaseForm() {
       </div>
 
       {/* Submit button */}
-      <Button type="submit" disabled={isSubmitting}>
-        {isSubmitting ? "Submitting..." : "Generate Release Notes"}
+      <Button type="submit" disabled={submitLoading || !isValid}>
+        {submitLoading ? "Submitting..." : "Generate Release Notes"}
       </Button>
     </form>
   )
