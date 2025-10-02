@@ -75,7 +75,7 @@ export const PROMPTS = {
     Now: using the provided VERSION and CHANGES below, generate the release notes.
     
     VERSION:
-    {--VERSION--}
+    {VERSION}
     
     CHANGES:
     {CHANGES}
