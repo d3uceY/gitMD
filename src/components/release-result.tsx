@@ -1,7 +1,11 @@
 import { Card } from "@/components/ui/card"
-import { Rocket } from "lucide-react"
+// import { Rocket } from "lucide-react"
+import { MarkdownRenderer } from "./markdown-renderer"
+import { useMarkdown } from "@/context/ReleaseNoteContext"
+
 
 export function ReleasePreview() {
+  const { markdown } = useMarkdown();
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
@@ -9,7 +13,8 @@ export function ReleasePreview() {
       </div>
 
       <Card className="p-6 bg-card shadow-elevation min-h-[500px]">
-        <div className="prose prose-slate max-w-none">
+        <MarkdownRenderer content={markdown} />
+        {/* <div className="prose prose-slate max-w-none">
           <div className="flex items-center gap-2 mb-4">
             <Rocket className="h-6 w-6 text-primary" />
             <h1 className="text-3xl font-bold m-0 text-foreground">Release 1.0.0</h1>
@@ -66,7 +71,7 @@ export function ReleasePreview() {
               </li>
             </ul>
           </div>
-        </div>
+        </div> */}
       </Card>
     </div>
   )

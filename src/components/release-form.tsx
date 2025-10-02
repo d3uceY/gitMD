@@ -14,11 +14,13 @@ import { toast } from "sonner"
 import { releaseSchema } from "@/lib/zod-schema/releasesSchema"
 import type { ReleaseFormData } from "@/lib/zod-schema/releasesSchema"
 import { useState } from "react"
+import { useMarkdown } from "@/context/ReleaseNoteContext"
 
 
 
 export function ReleaseForm() {
-  const [submitLoading, setSubmitLoading] = useState(false);
+  const { markdown, setMarkdown, loading, setLoading } = useMarkdown();
+
   const {
     register,
     handleSubmit,
@@ -36,7 +38,7 @@ export function ReleaseForm() {
 
     const promise = async () => {
       try {
-        setSubmitLoading(true)
+        setLoading(true)
         const response = await fetch(API_CONSTANTS.generate_release_md, {
           method: "POST",
           headers: {
@@ -45,13 +47,13 @@ export function ReleaseForm() {
           body: JSON.stringify(data),
         })
         const resp = await response.json()
-        console.log(resp)
+        setMarkdown(resp.text)
         reset()
         return resp
       } catch (error) {
         throw error
       } finally {
-        setSubmitLoading(false)
+        setLoading(false)
       }
     }
 
@@ -108,8 +110,8 @@ export function ReleaseForm() {
       </div>
 
       {/* Submit button */}
-      <Button type="submit" disabled={submitLoading || !isValid}>
-        {submitLoading ? "Submitting..." : "Generate Release Notes"}
+      <Button type="submit" disabled={loading || !isValid}>
+        {loading ? "Submitting..." : "Generate Release Notes"}
       </Button>
     </form>
   )
