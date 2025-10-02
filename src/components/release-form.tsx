@@ -33,7 +33,6 @@ export function ReleaseForm() {
   })
 
   const onSubmit = async (data: ReleaseFormData) => {
-    console.log("✅ Release Notes:", data)
 
     const promise = async () => {
       try {
