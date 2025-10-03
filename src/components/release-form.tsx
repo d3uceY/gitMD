@@ -33,6 +33,7 @@ export function ReleaseForm() {
     reset,
   } = useForm<ReleaseFormData>({
     resolver: zodResolver(releaseSchema),
+    mode: "onChange",
     defaultValues: {
       version: "",
       changes: "",
