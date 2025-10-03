@@ -2,6 +2,7 @@ import { generateText } from "ai";
 import { google } from "@ai-sdk/google";
 import { NextResponse } from "next/server";
 import { PROMPTS } from "@/lib/prompts";
+import { normalizeText } from "@/lib/helpers/normalizeText";
 
 export async function POST(request: Request) {
     const { version, changes } = await request.json();
@@ -12,7 +13,7 @@ export async function POST(request: Request) {
 
     const formatedPrompt = PROMPTS.releaseNote
         .replaceAll("{VERSION}", version)
-        .replaceAll("{CHANGES}", changes.replaceAll("\r\n", "\n"));
+        .replaceAll("{CHANGES}", normalizeText(changes));
 
     try {
         const result = await generateText({

@@ -8,7 +8,7 @@ import { API_CONSTANTS } from "@/lib/constants/api-constants"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Sparkles, Wrench, Package } from "lucide-react"
+import { Sparkles, Wrench, Package, Terminal, FileWarning } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
 import { releaseSchema } from "@/lib/zod-schema/releasesSchema"
@@ -16,6 +16,7 @@ import type { ReleaseFormData } from "@/lib/zod-schema/releasesSchema"
 import { useState } from "react"
 import { useMarkdown } from "@/context/ReleaseNoteContext"
 import { useEffect } from "react"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 
 
 
@@ -96,7 +97,12 @@ export function ReleaseForm() {
           {...register("version")}
         />
         {errors.version && (
-          <p className="text-sm text-red-500">{errors.version.message}</p>
+          <Alert variant="destructive">
+            <AlertTitle>Version</AlertTitle>
+            <AlertDescription>
+              {errors.version.message}
+            </AlertDescription>
+          </Alert>
         )}
       </div>
 
@@ -118,10 +124,16 @@ export function ReleaseForm() {
           {...register("changes")}
         />
         <div className=" w-fit ml-auto text-xs">
-          <span className={`${textLength > maxLength && 'text-red-500'} ${textLength == maxLength && 'text-orange-400'}`}>{textLength}</span>/{maxLength}
+          <span className={`${textLength > maxLength && 'text-red-500'} ${textLength == maxLength && 'text-orange-400'} font-semibold`}>{textLength}</span>/{maxLength}
         </div>
         {errors.changes && (
-          <p className="text-sm text-red-500">{errors.changes.message}</p>
+          <Alert variant="destructive">
+            <FileWarning/>
+            <AlertTitle>Changes</AlertTitle>
+            <AlertDescription>
+              {errors.changes.message}
+            </AlertDescription>
+          </Alert>
         )}
       </div>
 
