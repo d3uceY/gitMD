@@ -118,7 +118,7 @@ export function ReleaseForm() {
           {...register("changes")}
         />
         <div className=" w-fit ml-auto text-xs">
-          <span className={`${textLength > maxLength && 'text-red-500'}`}>{textLength}</span>/{maxLength}
+          <span className={`${textLength > maxLength && 'text-red-500'} ${textLength == maxLength && 'text-orange-400'}`}>{textLength}</span>/{maxLength}
         </div>
         {errors.changes && (
           <p className="text-sm text-red-500">{errors.changes.message}</p>
