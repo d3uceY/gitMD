@@ -2,6 +2,8 @@ import { Card } from "@/components/ui/card"
 // import { Rocket } from "lucide-react"
 import { MarkdownRenderer } from "./markdown-renderer"
 import { useMarkdown } from "@/context/ReleaseNoteContext"
+import { Copy } from "lucide-react";
+import { copyText } from "@/lib/helpers/copyText";
 
 
 export function ReleasePreview() {
@@ -10,6 +12,13 @@ export function ReleasePreview() {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold text-foreground">Preview</h2>
+        {
+          markdown && (
+            <button onClick={() => copyText(markdown)}>
+              <Copy />
+            </button>
+          )
+        }
       </div>
 
       <Card className="p-6 bg-card shadow-elevation min-h-[500px]">
