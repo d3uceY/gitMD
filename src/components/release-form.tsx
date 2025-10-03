@@ -15,15 +15,19 @@ import { releaseSchema } from "@/lib/zod-schema/releasesSchema"
 import type { ReleaseFormData } from "@/lib/zod-schema/releasesSchema"
 import { useState } from "react"
 import { useMarkdown } from "@/context/ReleaseNoteContext"
+import { useEffect } from "react"
 
 
 
 export function ReleaseForm() {
   const { markdown, setMarkdown, loading, setLoading } = useMarkdown();
+  const [textLength, setTextLength] = useState(0)
+  const maxLength = 1000;
 
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors, isValid },
     reset,
   } = useForm<ReleaseFormData>({
@@ -33,6 +37,15 @@ export function ReleaseForm() {
       changes: "",
     },
   })
+
+
+  useEffect(() => {
+    const getTextLength = (text: string) => {
+      return text.length
+    }
+
+    setTextLength(getTextLength(watch("changes")))
+  }, [watch("changes")])
 
   const onSubmit = async (data: ReleaseFormData) => {
 
@@ -104,6 +117,9 @@ export function ReleaseForm() {
           className="min-h-[200px] bg-background resize-none"
           {...register("changes")}
         />
+        <div className=" w-fit ml-auto text-xs">
+          <span className={`${textLength > maxLength && 'text-red-500'}`}>{textLength}</span>/{maxLength}
+        </div>
         {errors.changes && (
           <p className="text-sm text-red-500">{errors.changes.message}</p>
         )}
