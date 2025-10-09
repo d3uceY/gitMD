@@ -1,4 +1,5 @@
 "use client"
+import { FormButtonGroup } from "@/components/form-button-group";
 import { ReleaseForm } from "@/components/release-form";
 import { ReleasePreview } from "@/components/release-result";
 import { Card } from "@/components/ui/card";
@@ -18,9 +19,15 @@ const Index = () => {
 
       <main className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-7xl mx-auto">
-          <Card className="p-6 bg-card shadow-card">
-            <ReleaseForm />
-          </Card>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl font-bold text-foreground">Release Form</h2>
+              <FormButtonGroup />
+            </div>
+            <Card className="p-6 bg-card shadow-card">
+              <ReleaseForm />
+            </Card>
+          </div>
 
           <div className="lg:sticky lg:top-24 h-fit">
             <ReleasePreview />

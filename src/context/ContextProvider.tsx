@@ -24,7 +24,6 @@ export function MarkdownContextProvider({ children }: { children: React.ReactNod
     const [markdown, setMarkdown] = useState<string>('')
     const [loading, setLoading] = useState<boolean>(false)
 
-
     return (
         <MarkdownContext.Provider value={{ markdown, setMarkdown, loading, setLoading }}>
             {children}

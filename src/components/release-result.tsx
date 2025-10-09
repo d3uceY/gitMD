@@ -1,7 +1,7 @@
 import { Card } from "@/components/ui/card"
 // import { Rocket } from "lucide-react"
 import { MarkdownRenderer } from "./markdown-renderer"
-import { useMarkdown } from "@/context/ReleaseNoteContext"
+import { useMarkdown } from "@/context/ContextProvider"
 import { Copy } from "lucide-react";
 import { copyText } from "@/lib/helpers/copyText";
 

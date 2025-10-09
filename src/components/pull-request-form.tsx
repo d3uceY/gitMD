@@ -11,10 +11,10 @@ import { Textarea } from "@/components/ui/textarea"
 import { Sparkles, Wrench, Package, Terminal, FileWarning } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
-import { releaseSchema } from "@/lib/zod-schema/releasesSchema"
-import type { ReleaseFormData } from "@/lib/zod-schema/releasesSchema"
+import { pullRequestSchema } from "@/lib/zod-schema/pullRequestSchema"
+import type { PullRequestFormData } from "@/lib/zod-schema/pullRequestSchema"
 import { useState } from "react"
-import { useMarkdown } from "@/context/ReleaseNoteContext"
+import { useMarkdown } from "@/context/ContextProvider"
 import { useEffect } from "react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 
@@ -31,11 +31,11 @@ export function ReleaseForm() {
         watch,
         formState: { errors, isValid },
         reset,
-    } = useForm<ReleaseFormData>({
-        resolver: zodResolver(releaseSchema),
+    } = useForm<PullRequestFormData>({
+        resolver: zodResolver(pullRequestSchema),
         mode: "onChange",
         defaultValues: {
-            version: "",
+            title: "",
             changes: "",
         },
     })
@@ -49,7 +49,7 @@ export function ReleaseForm() {
         setTextLength(getTextLength(watch("changes")))
     }, [watch("changes")])
 
-    const onSubmit = async (data: ReleaseFormData) => {
+    const onSubmit = async (data: PullRequestFormData) => {
         if (!data.changes) {
             toast.error("Please enter changes")
             return
