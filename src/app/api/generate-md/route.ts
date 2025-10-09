@@ -11,7 +11,7 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: "No data provided" }, { status: 400 });
     }
 
-    const formatedPrompt = PROMPTS.releaseNote
+    const formatedPrompt = PROMPTS.releaseNotesMandarin
         .replaceAll("{VERSION}", version)
         .replaceAll("{CHANGES}", normalizeText(changes));
 

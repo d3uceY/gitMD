@@ -50,16 +50,18 @@ export function ReleaseForm() {
   }, [watch("changes")])
 
   const onSubmit = async (data: ReleaseFormData) => {
-
+    const payload = {
+      ...data, type: 'rel' // added release notes type
+    }
     const promise = async () => {
       try {
         setLoading(true)
-        const response = await fetch(API_CONSTANTS.generate_release_md, {
+        const response = await fetch(API_CONSTANTS.generate_md, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(data),
+          body: JSON.stringify(payload),
         })
         const resp = await response.json()
         setMarkdown(resp.text)
@@ -129,7 +131,7 @@ export function ReleaseForm() {
         </div>
         {errors.changes && (
           <Alert variant="destructive">
-            <FileWarning/>
+            <FileWarning />
             <AlertTitle>Changes</AlertTitle>
             <AlertDescription>
               {errors.changes.message}
